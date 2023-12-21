@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+
+        <property name="connection.driver_class">org.sqlite.JDBC</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.SQLiteDialect</property>
+
+        <property name="connection.url">jdbc:sqlite:home.db</property>
+        <mapping class="org.max.home.CourierInfoEntity"/>
+        <mapping class="org.max.home.CustomersEntity"/>
+        <mapping class="org.max.home.DeliveryEntity"/>
+        <mapping class="org.max.home.OrdersEntity"/>
+        <mapping class="org.max.home.OrdersProductsEntity"/>
+        <mapping class="org.max.home.ProductsEntity"/>
+
+<!--        <property name="connection.url">jdbc:sqlite:demo.db</property>-->
+<!--        <mapping class="org.max.demo.EmployeeEntity"/>-->
+<!--        <mapping class="org.max.demo.EmployeeInfoEntity"/>-->
+
+<!--        <property name="connection.url">jdbc:sqlite:seminar.db</property>
+        <mapping class="org.max.seminar.ClientEntity"/>
+        <mapping class="org.max.seminar.CreditEntity"/>
+        <mapping class="org.max.seminar.CurrentEntity"/>
+        <mapping class="org.max.seminar.DebitEntity"/>
+        <mapping class="org.max.seminar.EmployeeEntity"/>-->
+
+        <!-- <property name="connection.username"/> -->
+        <!-- <property name="connection.password"/> -->
+
+        <!-- DB schema will be updated if needed -->
+        <!-- <property name="hibernate.hbm2ddl.auto">update</property> -->
+    </session-factory>
+</hibernate-configuration>

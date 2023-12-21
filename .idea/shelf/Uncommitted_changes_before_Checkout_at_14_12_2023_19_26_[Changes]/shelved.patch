@@ -1,0 +1,26 @@
+Index: src/test/java/org/max/demo/DBTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.max.demo;\r\n\r\nimport org.junit.jupiter.api.Assertions;\r\nimport org.junit.jupiter.api.BeforeAll;\r\nimport org.junit.jupiter.api.Test;\r\n\r\nimport java.sql.*;\r\n\r\npublic class DBTest {\r\n\r\n    //Объект подключения\r\n    private static Connection connection;\r\n\r\n    @BeforeAll\r\n    static void init() {\r\n        connect(\"project.db\");\r\n    }\r\n\r\n    @Test\r\n    void testConstraintStatus() {\r\n        Assertions.assertThrows(SQLException.class, () -> insertRequestInfo(100000, null, \"10\", \"\", \"OLD\"));\r\n        Assertions.assertThrows(IllegalArgumentException.class, () -> insertRequestInfo(100000, null, \"10\", \"\", \"NotValue\"));\r\n    }\r\n\r\n    @Test\r\n    void insert() throws SQLException {\r\n        insertRequestInfo(100001, \"name\", \"10\", \"\", \"OLD\");\r\n        String sql = \"SELECT * FROM request_type\";\r\n\r\n            Statement stmt  = connection.createStatement();\r\n            ResultSet rs    = stmt.executeQuery(sql);\r\n            Assertions.assertNotNull(rs);\r\n            int countTableSize = 0;\r\n            // loop through the result set\r\n            while (rs.next()) {\r\n                countTableSize++;\r\n            }\r\n            Assertions.assertEquals(10001,countTableSize);\r\n    }\r\n\r\n    @Test\r\n    void testDictStatus() throws SQLException {\r\n        String sql = \"SELECT * FROM status\";\r\n\r\n        Statement stmt  = connection.createStatement();\r\n        ResultSet rs    = stmt.executeQuery(sql);\r\n        Assertions.assertNotNull(rs);\r\n        int countTableSize = 0;\r\n        // loop through the result set\r\n        while (rs.next()) {\r\n            Assertions.assertNotNull(GenerateFileTest.StatusType.valueOf(rs.getString(\"status_name\")));\r\n            countTableSize++;\r\n        }\r\n        Assertions.assertEquals(3,countTableSize);\r\n    }\r\n\r\n    private void insertRequestInfo(Integer id, String name, String weight, String description, String status) throws SQLException {\r\n        String sql = \"INSERT INTO request_type(\" +\r\n                \"id, request_name, weight, description, status) VALUES(?,?,?,?,?)\";\r\n            PreparedStatement pstmt = connection.prepareStatement(sql);\r\n            pstmt.setInt(1, id);\r\n            pstmt.setString(2, name);\r\n            pstmt.setString(3, weight);\r\n            pstmt.setString(4, description);\r\n            pstmt.setString(5, String.valueOf(GenerateFileTest.StatusType.valueOf(status).getCode()));\r\n            pstmt.executeUpdate();\r\n    }\r\n\r\n    //Создание подключений к СУБД\r\n    private static void connect(String name) {\r\n        try {\r\n            //Регистрация драйвера\r\n            Class.forName(\"org.sqlite.JDBC\");\r\n            //Создание подключения\r\n            connection = DriverManager.getConnection(\"jdbc:sqlite:\"+name);\r\n        } catch ( Exception e ) {\r\n            System.err.println( e.getClass().getName() + \": \" + e.getMessage() );\r\n            System.exit(0);\r\n        }\r\n        System.out.println(\"Opened database successfully\");\r\n    }\r\n\r\n\r\n}\r\n
+===================================================================
+diff --git a/src/test/java/org/max/demo/DBTest.java b/src/test/java/org/max/demo/DBTest.java
+--- a/src/test/java/org/max/demo/DBTest.java	
++++ b/src/test/java/org/max/demo/DBTest.java	
+@@ -24,7 +24,7 @@
+ 
+     @Test
+     void insert() throws SQLException {
+-        insertRequestInfo(100001, "name", "10", "", "OLD");
++        insertRequestInfo(100003, "name", "10", "", "OLD");
+         String sql = "SELECT * FROM request_type";
+ 
+             Statement stmt  = connection.createStatement();
+@@ -35,7 +35,7 @@
+             while (rs.next()) {
+                 countTableSize++;
+             }
+-            Assertions.assertEquals(10001,countTableSize);
++            Assertions.assertEquals(3,countTableSize);
+     }
+ 
+     @Test
